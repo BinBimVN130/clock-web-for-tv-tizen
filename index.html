@@ -7,43 +7,101 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#fff;--text:#111;--muted:#444;--ctrl-bg:#eee;--ctrl-text:#222;--accent:#333;
+  --bg:#f5f5f5;--text:#111;--muted:#555;--ctrl-bg:rgba(255,255,255,0.92);--ctrl-text:#222;
 }
 [data-theme="dark"]{
-  --bg:#0a0a0a;--text:#f0f0f0;--muted:#aaa;--ctrl-bg:#222;--ctrl-text:#ddd;--accent:#ccc;
+  --bg:#0c0c0c;--text:#f0f0f0;--muted:#999;--ctrl-bg:rgba(18,18,18,0.95);--ctrl-text:#ddd;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;transition:background .3s,color .3s}
-body{display:flex;flex-direction:column;justify-content:center;align-items:center;user-select:none;-webkit-user-select:none;padding:1rem}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",sans-serif;transition:background .3s,color .3s}
+body{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  user-select:none;-webkit-user-select:none;padding:1rem 1rem 3.5rem;
+  position:relative;overflow:hidden;
+}
+
+/* soft gradient background */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 28% 18%, rgba(170,195,255,0.22), transparent 55%),
+    radial-gradient(ellipse at 72% 82%, rgba(255,195,170,0.16), transparent 50%);
+}
+[data-theme="dark"] body::before{
+  background:
+    radial-gradient(ellipse at 25% 15%, rgba(55,85,150,0.32), transparent 55%),
+    radial-gradient(ellipse at 75% 85%, rgba(110,55,35,0.18), transparent 50%);
+}
+
 #time{
+  position:relative;z-index:1;
   font-size:clamp(3.8rem,17vw,11.5rem);
-  font-weight:700;
-  letter-spacing:0.02em;
+  font-weight:300;
+  letter-spacing:0.04em;
   font-variant-numeric:tabular-nums;
   line-height:1;
-  margin-bottom:1.6rem;
+  margin-bottom:1.3rem;
+  text-shadow:0 2px 12px rgba(0,0,0,0.07);
+  display:flex;align-items:baseline;justify-content:center;
 }
-.info{text-align:center;font-size:clamp(1rem,3.2vw,1.7rem);line-height:1.55;color:var(--muted)}
-.info b{color:var(--text);font-weight:500}
-#event-today,#event-next{margin-top:0.9rem;font-size:clamp(0.95rem,2.8vw,1.45rem)}
+[data-theme="dark"] #time{text-shadow:0 2px 16px rgba(0,0,0,0.4)}
+#ampm{
+  font-size:0.26em;
+  font-weight:500;
+  opacity:0.4;
+  letter-spacing:0.05em;
+  margin-left:0.18em;
+  transform:translateY(-0.12em);
+}
+
+.info{position:relative;z-index:1;text-align:center;line-height:1.5}
+#solar{
+  font-size:clamp(1.05rem,3.3vw,1.75rem);
+  color:var(--text);
+  font-weight:500;
+  margin-bottom:0.3rem;
+}
+#lunar{
+  font-size:clamp(0.88rem,2.5vw,1.2rem);
+  color:var(--muted);
+  margin-bottom:0.65rem;
+}
+#event-today,#event-next{
+  font-size:clamp(0.8rem,2.2vw,1.05rem);
+  color:var(--muted);
+  margin-top:0.3rem;
+}
+#event-today b,#event-next b{color:var(--text);font-weight:500}
+
 .controls{
-  position:fixed;bottom:0;left:0;right:0;
-  display:flex;justify-content:center;gap:1.5rem;flex-wrap:wrap;
-  padding:0.7rem 1rem;background:var(--ctrl-bg);color:var(--ctrl-text);
-  font-size:0.9rem;border-top:1px solid rgba(128,128,128,0.25);
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:20;
+  display:flex;justify-content:center;align-items:center;gap:1.4rem;flex-wrap:wrap;
+  padding:0.7rem 1rem;
+  background:var(--ctrl-bg);
+  color:var(--ctrl-text);
+  font-size:0.9rem;
+  border-top:1px solid rgba(128,128,128,0.2);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
 .ctrl{display:flex;align-items:center;gap:0.4rem}
-.ctrl label{opacity:0.85}
+.ctrl label{opacity:0.85;white-space:nowrap}
 select{
-  background:var(--bg);color:var(--text);border:1px solid rgba(128,128,128,0.4);
-  border-radius:4px;padding:0.25rem 0.4rem;font-size:0.9rem;cursor:pointer;
+  background:var(--bg);color:var(--text);
+  border:1px solid rgba(128,128,128,0.35);
+  border-radius:6px;padding:0.28rem 0.45rem;
+  font-size:0.9rem;cursor:pointer;
 }
-.version{position:fixed;bottom:0.6rem;right:0.8rem;font-size:0.75rem;opacity:0.45}
+.version{
+  position:fixed;bottom:0.55rem;right:0.8rem;
+  font-size:0.72rem;opacity:0.4;z-index:21;cursor:pointer;
+}
 </style>
 </head>
 <body>
   <div id="time">00:00:00</div>
   <div class="info">
-    <div id="solar">Dương: ---</div>
+    <div id="solar">---</div>
     <div id="lunar">Âm: ---</div>
     <div id="event-today">Sự kiện hôm nay: ---</div>
     <div id="event-next">Sự kiện lần tới: ---</div>
@@ -66,13 +124,12 @@ select{
       </select>
     </div>
   </div>
-  <div class="version">V1.3</div>
+  <div class="version" id="version" title="Nhấn để reset">V1.4</div>
 
 <script>
-/* ===== Lunar algorithm (Hồ Ngọc Đức) ===== */
+/* ===== Lunar (Hồ Ngọc Đức) ===== */
 const PI=Math.PI;
 function jdFromDate(dd,mm,yy){const a=Math.floor((14-mm)/12),y=yy+4800-a,m=mm+12*a-3;let jd=dd+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-Math.floor(y/100)+Math.floor(y/400)-32045;if(jd<2299161){jd=dd+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-32083}return jd}
-function jdToDate(jd){let a,b,c;if(jd>2299160){a=jd+32044;b=Math.floor((4*a+3)/146097);c=a-Math.floor(b*146097/4)}else{b=0;c=jd+32082}const d=Math.floor((4*c+3)/1461),e=c-Math.floor(1461*d/4),m=Math.floor((5*e+2)/153);const day=e-Math.floor((153*m+2)/5)+1,month=m+3-12*Math.floor(m/10),year=b*100+d-4800+Math.floor(m/10);return[day,month,year]}
 function NewMoon(k){const T=k/1236.85,T2=T*T,T3=T2*T,dr=PI/180;let Jd1=2415020.75933+29.53058868*k+0.0001178*T2-0.000000155*T3;Jd1=Jd1+0.00033*Math.sin((166.56+132.87*T-0.009173*T2)*dr);const M=359.2242+29.10535608*k-0.0000333*T2-0.00000347*T3,Mpr=306.0253+385.81691806*k+0.0107306*T2+0.00001236*T3,F=21.2964+390.67050646*k-0.0016528*T2-0.00000239*T3;let C1=(0.1734-0.000393*T)*Math.sin(M*dr)+0.0021*Math.sin(2*dr*M);C1=C1-0.4068*Math.sin(Mpr*dr)+0.0161*Math.sin(dr*2*Mpr);C1=C1-0.0004*Math.sin(dr*3*Mpr);C1=C1+0.0104*Math.sin(dr*2*F)-0.0051*Math.sin(dr*(M+Mpr));C1=C1-0.0074*Math.sin(dr*(M-Mpr))+0.0004*Math.sin(dr*(2*F+M));C1=C1-0.0004*Math.sin(dr*(2*F-M))-0.0006*Math.sin(dr*(2*F+Mpr))+0.0010*Math.sin(dr*(2*F-Mpr))+0.0005*Math.sin(dr*(2*Mpr+M));const deltat=T<-11?0.001+0.000839*T+0.0001603*T2-0.00009839*T3:0.001+0.0005181*T+0.0002*T2;return Jd1+C1-deltat}
 function SunLongitude(jdn){const T=(jdn-2451545.0)/36525,T2=T*T,dr=PI/180,M=357.52910+35999.05030*T-0.0001559*T2-0.00000048*T*T2,L0=280.46645+36000.76983*T+0.0003032*T2,DL=(1.914600-0.004817*T-0.000014*T2)*Math.sin(dr*M)+(0.019993-0.000101*T)*Math.sin(dr*2*M)+0.000290*Math.sin(dr*3*M);let L=L0+DL;L=L*dr;L=L-PI*2*(Math.floor(L/(PI*2)));return L}
 function getSunLongitude(dayNumber,timeZone){return Math.floor(SunLongitude(dayNumber-0.5-timeZone/24)/PI*6)}
@@ -81,12 +138,10 @@ function getLunarMonth11(yy,timeZone){const off=jdFromDate(31,12,yy)-2415021,k=M
 function getLeapMonthOffset(a11,timeZone){const k=Math.floor((a11-2415021.076998695)/29.530588853+0.5);let last=0,i=1,arc=getSunLongitude(getNewMoonDay(k+i,timeZone),timeZone);do{last=arc;i++;arc=getSunLongitude(getNewMoonDay(k+i,timeZone),timeZone)}while(arc!=last&&i<14);return i-1}
 function convertSolar2Lunar(dd,mm,yy,timeZone=7){const dayNumber=jdFromDate(dd,mm,yy),k=Math.floor((dayNumber-2415021.076998695)/29.530588853);let monthStart=getNewMoonDay(k+1,timeZone);if(monthStart>dayNumber){monthStart=getNewMoonDay(k,timeZone)}let a11=getLunarMonth11(yy,timeZone),b11=a11,lunarYear;if(a11>=monthStart){lunarYear=yy;a11=getLunarMonth11(yy-1,timeZone)}else{lunarYear=yy+1;b11=getLunarMonth11(yy+1,timeZone)}const lunarDay=dayNumber-monthStart+1;let lunarLeap=0,diff=Math.floor((monthStart-a11)/29),lunarMonth=diff+11;if(b11-a11>365){const leapMonthDiff=getLeapMonthOffset(a11,timeZone);if(diff>=leapMonthDiff){lunarMonth=diff+10;if(diff==leapMonthDiff)lunarLeap=1}}if(lunarMonth>12)lunarMonth-=12;if(lunarMonth>=11&&diff<4)lunarYear-=1;return[lunarDay,lunarMonth,lunarYear,lunarLeap]}
 
-/* Can Chi */
 const CAN=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
 const CHI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
 function getCanChiYear(year){return CAN[(year+6)%10]+' '+CHI[(year+8)%12]}
 
-/* ===== Holidays ===== */
 const SOLAR_EVENTS=[
   {m:1,d:1,name:'Tết Dương lịch'},
   {m:4,d:30,name:'Ngày Giải phóng miền Nam'},
@@ -108,7 +163,6 @@ const LUNAR_EVENTS=[
   {m:12,d:23,name:'Ông Táo về trời'}
 ];
 
-/* ===== Settings ===== */
 const $ = id => document.getElementById(id);
 const settings = {
   fmt: localStorage.getItem('clock_fmt') || '24',
@@ -119,9 +173,9 @@ $('theme').value = settings.theme;
 
 function applyTheme(){
   let t = settings.theme;
-  if(t==='auto'){
+  if(t === 'auto'){
     const h = new Date().getHours();
-    t = (h>=6 && h<18) ? 'light' : 'dark';
+    t = (h >= 6 && h < 18) ? 'light' : 'dark';
   }
   document.documentElement.setAttribute('data-theme', t);
 }
@@ -138,7 +192,6 @@ $('theme').onchange = e => {
   applyTheme();
 };
 
-/* ===== Main update ===== */
 const days = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
 
 function getVNDate(){
@@ -147,33 +200,27 @@ function getVNDate(){
   return new Date(utc + 7*3600000);
 }
 
-function findEvents(solarY, solarM, solarD, lunarD, lunarM, lunarY){
+function findEvents(solarY, solarM, solarD, lunarD, lunarM){
   let today = null;
-  // solar
   for(const e of SOLAR_EVENTS){
     if(e.m===solarM && e.d===solarD){ today = e.name; break; }
   }
-  // lunar
   if(!today){
     for(const e of LUNAR_EVENTS){
       if(e.m===lunarM && e.d===lunarD){ today = e.name; break; }
     }
   }
-
-  // next event (look ahead max 400 days)
   let nextName=null, nextDate=null;
   const base = new Date(solarY, solarM-1, solarD);
   for(let i=1;i<=400;i++){
     const dt = new Date(base.getTime() + i*86400000);
     const y=dt.getFullYear(), m=dt.getMonth()+1, d=dt.getDate();
-    // solar check
     for(const e of SOLAR_EVENTS){
       if(e.m===m && e.d===d){
         nextName=e.name; nextDate=`${String(d).padStart(2,'0')}/${String(m).padStart(2,'0')}/${y}`;
         return {today, nextName, nextDate};
       }
     }
-    // lunar check
     const [ld,lm] = convertSolar2Lunar(d,m,y,7);
     for(const e of LUNAR_EVENTS){
       if(e.m===lm && e.d===ld){
@@ -190,41 +237,43 @@ function update(){
   const h = vn.getHours(), mi = vn.getMinutes(), s = vn.getSeconds();
   const y = vn.getFullYear(), m = vn.getMonth()+1, d = vn.getDate();
 
-  // time
-  let timeStr;
-  if(settings.fmt==='12'){
-    const ap = h>=12 ? 'PM' : 'AM';
-    const h12 = h%12 || 12;
-    timeStr = `${String(h12).padStart(2,'0')}:${String(mi).padStart(2,'0')}:${String(s).padStart(2,'0')} ${ap}`;
-  }else{
-    timeStr = `${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  if(settings.fmt === '12'){
+    const ap = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
+    $('time').innerHTML = `${String(h12).padStart(2,'0')}:${String(mi).padStart(2,'0')}:${String(s).padStart(2,'0')}<span id="ampm">${ap}</span>`;
+  } else {
+    $('time').textContent = `${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   }
-  $('time').textContent = timeStr;
 
-  // solar
-  $('solar').innerHTML = `Dương: <b>${days[vn.getDay()]} ngày ${String(d).padStart(2,'0')} tháng ${m} năm ${y}</b>`;
+  $('solar').textContent = `${days[vn.getDay()]} ngày ${String(d).padStart(2,'0')} tháng ${m} năm ${y}`;
 
-  // lunar
   const [ld, lm, ly, leap] = convertSolar2Lunar(d, m, y, 7);
   const canchi = getCanChiYear(ly);
   const leapTxt = leap ? ' (nhuận)' : '';
-  $('lunar').innerHTML = `Âm: <b>Ngày ${ld} Tháng ${lm}${leapTxt} Năm ${canchi}</b>`;
+  $('lunar').textContent = `Âm: Ngày ${ld} Tháng ${lm}${leapTxt} Năm ${canchi}`;
 
-  // events
-  const ev = findEvents(y, m, d, ld, lm, ly);
+  const ev = findEvents(y, m, d, ld, lm);
   $('event-today').innerHTML = `Sự kiện hôm nay: <b>${ev.today || 'không có'}</b>`;
   if(ev.nextName){
     $('event-next').innerHTML = `Sự kiện lần tới: <b>${ev.nextName}</b> (${ev.nextDate})`;
-  }else{
+  } else {
     $('event-next').innerHTML = `Sự kiện lần tới: <b>---</b>`;
   }
 
-  // auto theme check every minute roughly
-  if(settings.theme==='auto') applyTheme();
+  if(settings.theme === 'auto') applyTheme();
 }
 
 update();
 setInterval(update, 1000);
+
+$("version").onclick = function(){
+  localStorage.removeItem("clock_fmt");
+  localStorage.removeItem("clock_theme");
+  localStorage.removeItem("clock_bg");
+  localStorage.removeItem("clock_bg_shown");
+  alert("Trang web này cho biết (reset thành công)");
+  location.reload();
+};
 </script>
 </body>
 </html>
