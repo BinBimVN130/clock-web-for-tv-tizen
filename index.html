@@ -94,7 +94,7 @@ select{
 }
 .version{
   position:fixed;bottom:0.55rem;right:0.8rem;
-  font-size:0.72rem;opacity:0.4;z-index:21;
+  font-size:0.72rem;opacity:0.4;z-index:21;cursor:pointer;
 }
 </style>
 </head>
@@ -124,7 +124,7 @@ select{
       </select>
     </div>
   </div>
-  <div class="version">V1.4</div>
+  <div class="version" id="version" title="Nhấn để reset">V1.4</div>
 
 <script>
 /* ===== Lunar (Hồ Ngọc Đức) ===== */
@@ -265,6 +265,15 @@ function update(){
 
 update();
 setInterval(update, 1000);
+
+$("version").onclick = function(){
+  localStorage.removeItem("clock_fmt");
+  localStorage.removeItem("clock_theme");
+  localStorage.removeItem("clock_bg");
+  localStorage.removeItem("clock_bg_shown");
+  alert("Trang web này cho biết (reset thành công)");
+  location.reload();
+};
 </script>
 </body>
 </html>
