@@ -7,108 +7,98 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#f7f7f7;--text:#111;--muted:#555;--ctrl-bg:rgba(255,255,255,0.88);--ctrl-text:#222;
+  --bg:#f5f5f5;--text:#111;--muted:#555;--ctrl-bg:rgba(255,255,255,0.92);--ctrl-text:#222;
 }
 [data-theme="dark"]{
-  --bg:#0b0b0b;--text:#f2f2f2;--muted:#999;--ctrl-bg:rgba(20,20,20,0.92);--ctrl-text:#ddd;
+  --bg:#0c0c0c;--text:#f0f0f0;--muted:#999;--ctrl-bg:rgba(18,18,18,0.95);--ctrl-text:#ddd;
 }
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;transition:background .35s,color .35s}
-body{display:flex;flex-direction:column;justify-content:center;align-items:center;user-select:none;-webkit-user-select:none;padding:1rem;position:relative;overflow:hidden}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;transition:background .3s,color .3s}
+body{
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  user-select:none;-webkit-user-select:none;padding:1rem 1rem 3.5rem;
+  position:relative;overflow:hidden;
+}
 
-#bg{position:fixed;inset:0;z-index:0;pointer-events:none;transition:opacity .4s}
-body > *:not(#bg){position:relative;z-index:1}
+/* soft gradient background */
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 28% 18%, rgba(170,195,255,0.22), transparent 55%),
+    radial-gradient(ellipse at 72% 82%, rgba(255,195,170,0.16), transparent 50%);
+}
+[data-theme="dark"] body::before{
+  background:
+    radial-gradient(ellipse at 25% 15%, rgba(55,85,150,0.32), transparent 55%),
+    radial-gradient(ellipse at 75% 85%, rgba(110,55,35,0.18), transparent 50%);
+}
 
 #time{
+  position:relative;z-index:1;
   font-size:clamp(3.8rem,17vw,11.5rem);
   font-weight:700;
   letter-spacing:0.02em;
   font-variant-numeric:tabular-nums;
   line-height:1;
-  margin-bottom:1.4rem;
-  text-shadow:0 2px 12px rgba(0,0,0,0.08);
-  display:flex;align-items:baseline;justify-content:center;gap:0.25em;
+  margin-bottom:1.3rem;
+  text-shadow:0 2px 12px rgba(0,0,0,0.07);
+  display:flex;align-items:baseline;justify-content:center;
 }
-[data-theme="dark"] #time{text-shadow:0 2px 18px rgba(0,0,0,0.45)}
+[data-theme="dark"] #time{text-shadow:0 2px 16px rgba(0,0,0,0.4)}
 #ampm{
-  font-size:0.28em;
+  font-size:0.26em;
   font-weight:500;
-  opacity:0.45;
-  letter-spacing:0.04em;
-  margin-left:0.15em;
-  transform:translateY(-0.15em);
+  opacity:0.4;
+  letter-spacing:0.05em;
+  margin-left:0.18em;
+  transform:translateY(-0.12em);
 }
 
-.info{text-align:center;line-height:1.5}
+.info{position:relative;z-index:1;text-align:center;line-height:1.5}
 #solar{
   font-size:clamp(1.05rem,3.3vw,1.75rem);
   color:var(--text);
   font-weight:500;
-  margin-bottom:0.35rem;
+  margin-bottom:0.3rem;
 }
 #lunar{
-  font-size:clamp(0.9rem,2.6vw,1.25rem);
+  font-size:clamp(0.88rem,2.5vw,1.2rem);
   color:var(--muted);
-  margin-bottom:0.7rem;
+  margin-bottom:0.65rem;
 }
 #event-today,#event-next{
-  font-size:clamp(0.82rem,2.3vw,1.1rem);
+  font-size:clamp(0.8rem,2.2vw,1.05rem);
   color:var(--muted);
-  margin-top:0.35rem;
+  margin-top:0.3rem;
 }
 #event-today b,#event-next b{color:var(--text);font-weight:500}
 
 .controls{
-  position:fixed;bottom:0;left:0;right:0;z-index:10;
-  display:flex;justify-content:center;gap:1.1rem;flex-wrap:wrap;
-  padding:0.6rem 0.8rem;background:var(--ctrl-bg);color:var(--ctrl-text);
-  font-size:0.86rem;border-top:1px solid rgba(128,128,128,0.2);
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:20;
+  display:flex;justify-content:center;align-items:center;gap:1.4rem;flex-wrap:wrap;
+  padding:0.7rem 1rem;
+  background:var(--ctrl-bg);
+  color:var(--ctrl-text);
+  font-size:0.9rem;
+  border-top:1px solid rgba(128,128,128,0.2);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
 }
-.ctrl{display:flex;align-items:center;gap:0.35rem}
+.ctrl{display:flex;align-items:center;gap:0.4rem}
 .ctrl label{opacity:0.85;white-space:nowrap}
 select{
-  background:var(--bg);color:var(--text);border:1px solid rgba(128,128,128,0.4);
-  border-radius:5px;padding:0.2rem 0.35rem;font-size:0.86rem;cursor:pointer;
-  max-width:9.2rem;
+  background:var(--bg);color:var(--text);
+  border:1px solid rgba(128,128,128,0.35);
+  border-radius:6px;padding:0.28rem 0.45rem;
+  font-size:0.9rem;cursor:pointer;
 }
-#bg-ctrl{display:none}
-.version{position:fixed;bottom:0.5rem;right:0.7rem;font-size:0.7rem;opacity:0.4;z-index:11}
-
-/* Gradient presets */
-.bg-none{background:var(--bg)}
-.bg-soft{
-  background: radial-gradient(ellipse at 30% 20%, rgba(180,200,255,0.25), transparent 55%),
-              radial-gradient(ellipse at 70% 80%, rgba(255,200,180,0.18), transparent 50%),
-              var(--bg);
-}
-[data-theme="dark"] .bg-soft{
-  background: radial-gradient(ellipse at 25% 15%, rgba(60,90,160,0.35), transparent 55%),
-              radial-gradient(ellipse at 75% 85%, rgba(120,60,40,0.2), transparent 50%),
-              var(--bg);
-}
-.bg-deep{
-  background: linear-gradient(160deg, #e8eef8 0%, #f5f0eb 50%, #eef2f7 100%);
-}
-[data-theme="dark"] .bg-deep{
-  background: linear-gradient(160deg, #0c1220 0%, #121018 45%, #0e1520 100%);
-}
-.bg-blue{
-  background: radial-gradient(circle at 50% 0%, #d6e6ff 0%, #f0f4fa 45%, #e8eef5 100%);
-}
-[data-theme="dark"] .bg-blue{
-  background: radial-gradient(circle at 50% 0%, #0f1c35 0%, #0b1018 50%, #0a0e16 100%);
-}
-.bg-warm{
-  background: radial-gradient(circle at 40% 30%, #ffe8d6 0%, #f7f0e9 40%, #f0ebe5 100%);
-}
-[data-theme="dark"] .bg-warm{
-  background: radial-gradient(circle at 40% 30%, #2a1a12 0%, #14100e 45%, #0f0d0b 100%);
+.version{
+  position:fixed;bottom:0.55rem;right:0.8rem;
+  font-size:0.72rem;opacity:0.4;z-index:21;
 }
 </style>
 </head>
 <body>
-  <div id="bg" class="bg-soft"></div>
-
   <div id="time">00:00:00</div>
   <div class="info">
     <div id="solar">---</div>
@@ -133,21 +123,11 @@ select{
         <option value="dark">Tối</option>
       </select>
     </div>
-    <div class="ctrl" id="bg-ctrl">
-      <label>Nền</label>
-      <select id="bgstyle">
-        <option value="soft">Nhẹ</option>
-        <option value="deep">Sâu</option>
-        <option value="blue">Xanh</option>
-        <option value="warm">Ấm</option>
-        <option value="none">Trơn</option>
-      </select>
-    </div>
   </div>
   <div class="version">V1.4</div>
 
 <script>
-/* ===== Lunar algorithm (Hồ Ngọc Đức) ===== */
+/* ===== Lunar (Hồ Ngọc Đức) ===== */
 const PI=Math.PI;
 function jdFromDate(dd,mm,yy){const a=Math.floor((14-mm)/12),y=yy+4800-a,m=mm+12*a-3;let jd=dd+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-Math.floor(y/100)+Math.floor(y/400)-32045;if(jd<2299161){jd=dd+Math.floor((153*m+2)/5)+365*y+Math.floor(y/4)-32083}return jd}
 function NewMoon(k){const T=k/1236.85,T2=T*T,T3=T2*T,dr=PI/180;let Jd1=2415020.75933+29.53058868*k+0.0001178*T2-0.000000155*T3;Jd1=Jd1+0.00033*Math.sin((166.56+132.87*T-0.009173*T2)*dr);const M=359.2242+29.10535608*k-0.0000333*T2-0.00000347*T3,Mpr=306.0253+385.81691806*k+0.0107306*T2+0.00001236*T3,F=21.2964+390.67050646*k-0.0016528*T2-0.00000239*T3;let C1=(0.1734-0.000393*T)*Math.sin(M*dr)+0.0021*Math.sin(2*dr*M);C1=C1-0.4068*Math.sin(Mpr*dr)+0.0161*Math.sin(dr*2*Mpr);C1=C1-0.0004*Math.sin(dr*3*Mpr);C1=C1+0.0104*Math.sin(dr*2*F)-0.0051*Math.sin(dr*(M+Mpr));C1=C1-0.0074*Math.sin(dr*(M-Mpr))+0.0004*Math.sin(dr*(2*F+M));C1=C1-0.0004*Math.sin(dr*(2*F-M))-0.0006*Math.sin(dr*(2*F+Mpr))+0.0010*Math.sin(dr*(2*F-Mpr))+0.0005*Math.sin(dr*(2*Mpr+M));const deltat=T<-11?0.001+0.000839*T+0.0001603*T2-0.00009839*T3:0.001+0.0005181*T+0.0002*T2;return Jd1+C1-deltat}
@@ -186,32 +166,19 @@ const LUNAR_EVENTS=[
 const $ = id => document.getElementById(id);
 const settings = {
   fmt: localStorage.getItem('clock_fmt') || '24',
-  theme: localStorage.getItem('clock_theme') || 'auto',
-  bg: localStorage.getItem('clock_bg') || 'soft',
-  bgShown: localStorage.getItem('clock_bg_shown') === '1'
+  theme: localStorage.getItem('clock_theme') || 'auto'
 };
 $('fmt').value = settings.fmt;
 $('theme').value = settings.theme;
-$('bgstyle').value = settings.bg;
 
 function applyTheme(){
   let t = settings.theme;
-  if(t==='auto'){
+  if(t === 'auto'){
     const h = new Date().getHours();
-    t = (h>=6 && h<18) ? 'light' : 'dark';
+    t = (h >= 6 && h < 18) ? 'light' : 'dark';
   }
   document.documentElement.setAttribute('data-theme', t);
-  applyBg();
 }
-function applyBg(){
-  $('bg').className = 'bg-' + settings.bg;
-}
-function showBgControl(){
-  $('bg-ctrl').style.display = 'flex';
-  settings.bgShown = true;
-  localStorage.setItem('clock_bg_shown','1');
-}
-if(settings.bgShown) showBgControl();
 applyTheme();
 
 $('fmt').onchange = e => {
@@ -223,12 +190,6 @@ $('theme').onchange = e => {
   settings.theme = e.target.value;
   localStorage.setItem('clock_theme', settings.theme);
   applyTheme();
-  showBgControl(); // hiện tùy chọn Nền sau khi chọn Giao diện
-};
-$('bgstyle').onchange = e => {
-  settings.bg = e.target.value;
-  localStorage.setItem('clock_bg', settings.bg);
-  applyBg();
 };
 
 const days = ['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
@@ -249,7 +210,6 @@ function findEvents(solarY, solarM, solarD, lunarD, lunarM){
       if(e.m===lunarM && e.d===lunarD){ today = e.name; break; }
     }
   }
-
   let nextName=null, nextDate=null;
   const base = new Date(solarY, solarM-1, solarD);
   for(let i=1;i<=400;i++){
@@ -277,34 +237,30 @@ function update(){
   const h = vn.getHours(), mi = vn.getMinutes(), s = vn.getSeconds();
   const y = vn.getFullYear(), m = vn.getMonth()+1, d = vn.getDate();
 
-  // Time display
-  if(settings.fmt==='12'){
-    const ap = h>=12 ? 'PM' : 'AM';
-    const h12 = h%12 || 12;
+  if(settings.fmt === '12'){
+    const ap = h >= 12 ? 'PM' : 'AM';
+    const h12 = h % 12 || 12;
     $('time').innerHTML = `${String(h12).padStart(2,'0')}:${String(mi).padStart(2,'0')}:${String(s).padStart(2,'0')}<span id="ampm">${ap}</span>`;
-  }else{
+  } else {
     $('time').textContent = `${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   }
 
-  // Solar - bỏ chữ "Dương:"
   $('solar').textContent = `${days[vn.getDay()]} ngày ${String(d).padStart(2,'0')} tháng ${m} năm ${y}`;
 
-  // Lunar
   const [ld, lm, ly, leap] = convertSolar2Lunar(d, m, y, 7);
   const canchi = getCanChiYear(ly);
   const leapTxt = leap ? ' (nhuận)' : '';
   $('lunar').textContent = `Âm: Ngày ${ld} Tháng ${lm}${leapTxt} Năm ${canchi}`;
 
-  // Events
   const ev = findEvents(y, m, d, ld, lm);
   $('event-today').innerHTML = `Sự kiện hôm nay: <b>${ev.today || 'không có'}</b>`;
   if(ev.nextName){
     $('event-next').innerHTML = `Sự kiện lần tới: <b>${ev.nextName}</b> (${ev.nextDate})`;
-  }else{
+  } else {
     $('event-next').innerHTML = `Sự kiện lần tới: <b>---</b>`;
   }
 
-  if(settings.theme==='auto') applyTheme();
+  if(settings.theme === 'auto') applyTheme();
 }
 
 update();
