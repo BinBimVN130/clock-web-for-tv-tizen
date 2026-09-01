@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đồng hồ</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;background:#fff;color:#000;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+body{display:flex;flex-direction:column;justify-content:center;align-items:center;user-select:none;-webkit-user-select:none}
+#time{
+  font-size:clamp(4rem,18vw,12rem);
+  font-weight:700;
+  letter-spacing:0.02em;
+  font-variant-numeric:tabular-nums;
+  line-height:1;
+}
+#date{
+  font-size:clamp(1.1rem,3.5vw,2rem);
+  margin-top:1.8rem;
+  font-weight:400;
+  color:#222;
+}
+</style>
+</head>
+<body>
+<div id="time">00:00:00</div>
+<div id="date">Đang tải...</div>
+<script>
+const d=['Chủ Nhật','Thứ Hai','Thứ Ba','Thứ Tư','Thứ Năm','Thứ Sáu','Thứ Bảy'];
+function u(){
+  const n=new Date();
+  const offset=7*60;
+  const utc=n.getTime()+n.getTimezoneOffset()*60000;
+  const vn=new Date(utc+offset*60000);
+  const h=String(vn.getHours()).padStart(2,'0');
+  const mi=String(vn.getMinutes()).padStart(2,'0');
+  const s=String(vn.getSeconds()).padStart(2,'0');
+  document.getElementById('time').textContent=h+':'+mi+':'+s;
+  const day=d[vn.getDay()];
+  const date=String(vn.getDate()).padStart(2,'0');
+  const month=vn.getMonth()+1;
+  const year=vn.getFullYear();
+  document.getElementById('date').textContent=day+' ngày '+date+' tháng '+month+' năm '+year;
+}
+u();setInterval(u,1000);
+</script>
+</body>
+</html>
