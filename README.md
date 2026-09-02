@@ -1,3 +1,5 @@
-https://binbimvn130.github.io/clock-web-for-tv-tizen/
+https://binbimvn130.github.io/clock-web-lite/
 
-=)))))))) no cap
+⚠ KHÔNG CÓ Ý ĐỊNH CHO CẢ THẾ GIỚI BIẾT!
+
+Đây là dự án cá nhân.
