@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Đồng hồ</title>
+<link rel="icon" id="favicon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3QgeD0iMTAiIHk9IjQiIHdpZHRoPSI4IiBoZWlnaHQ9IjIwIiBmaWxsPSIjMTExIi8+PHJlY3QgeD0iMTAiIHk9IjI0IiB3aWR0aD0iMTYiIGhlaWdodD0iNiIgZmlsbD0iI2UxMSIvPjwvc3ZnPg==">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -278,6 +280,13 @@ function update(){
     secEl.classList.remove('pull');
     void secEl.offsetWidth; // reflow
     secEl.classList.add('pull');
+
+    // favicon blink
+    const fav = document.getElementById('favicon');
+    if(fav){
+      fav.href = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3QgeD0iMTAiIHk9IjQiIHdpZHRoPSI4IiBoZWlnaHQ9IjIwIiBmaWxsPSIjMTExIi8+PHJlY3QgeD0iMTAiIHk9IjI0IiB3aWR0aD0iMTYiIGhlaWdodD0iNiIgZmlsbD0iI2Y1NSIvPjwvc3ZnPg==";
+      setTimeout(()=>{ fav.href = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3QgeD0iMTAiIHk9IjQiIHdpZHRoPSI4IiBoZWlnaHQ9IjIwIiBmaWxsPSIjMTExIi8+PHJlY3QgeD0iMTAiIHk9IjI0IiB3aWR0aD0iMTYiIGhlaWdodD0iNiIgZmlsbD0iI2UxMSIvPjwvc3ZnPg=="; }, 180);
+    }
   }
 
   $('solar').textContent = `${days[vn.getDay()]} ngày ${String(d).padStart(2,'0')} tháng ${m} năm ${y}`;
